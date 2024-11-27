@@ -1,0 +1,15 @@
+# setup services
+version: '3'
+
+services:
+  djangoserver:
+    container_name: backend
+    build: .
+    ports:
+      - "8000:8000"
+
+
+
+
+
+    
