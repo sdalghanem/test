@@ -4,35 +4,21 @@ services:
     container_name: django
     command: python manage.py runserver 0.0.0.0:8000
     volumes:
-      - ./testproject:/app
+      - ./test:/app  # ربط مجلد test الذي يحتوي على مشروع Django مع الحاوية
     networks:
       - app-network
     expose:
       - "8000"
-    depends_on:
-      - db
 
   nginx:
     image: nginx:alpine
     container_name: nginx
     volumes:
-      - ./nginx/nginx.conf:/etc/nginx/nginx.conf  # ربط nginx.conf
-      - ./nginx:/etc/nginx/conf.d  # ربط conf.d بحيث يحتوي على default.conf
-      - ./testproject:/app
+      - ./nginx/nginx.conf:/etc/nginx/nginx.conf  # ربط ملف nginx.conf
+      - ./nginx:/etc/nginx/conf.d  # ربط مجلد conf.d وملف default.conf
+      - ./test:/app  # ربط مجلد test الذي يحتوي على مشروع Django مع الحاوية
     ports:
       - "80:80"
-    networks:
-      - app-network
-    depends_on:
-      - django
-
-  db:
-    image: postgres:latest
-    container_name: db
-    environment:
-      POSTGRES_DB: testdb
-      POSTGRES_USER: testuser
-      POSTGRES_PASSWORD: testpassword
     networks:
       - app-network
 
