@@ -1,15 +1,23 @@
-# استخدم صورة Python كأساس
-FROM python:3.9-slim
+# استخدم صورة Python مع إصدار 3.11
+FROM python:3.11-slim
 
-# تعيين الدليل للعمل داخل الحاوية
+# إعداد بيئة العمل
 WORKDIR /app
 
-# نسخ ملف المتطلبات وتثبيت الحزم
-COPY requirements.txt .
-RUN pip install --no-cache-dir -r requirements.txt
+# تثبيت pip وتحديثه
+RUN pip install --upgrade pip
 
-# نسخ جميع ملفات المشروع إلى الحاوية
+# نسخ ملف المتطلبات
+COPY requirements.txt .
+
+# تثبيت الحزم المطلوبة
+RUN pip install -r requirements.txt
+
+# نسخ باقي الملفات إلى الحاوية
 COPY . .
 
-# تحديد الأمر الافتراضي لتشغيل تطبيق Django
+# تحديد المنفذ
+EXPOSE 8000
+
+# الأمر لتشغيل التطبيق
 CMD ["python", "manage.py", "runserver", "0.0.0.0:8000"]
