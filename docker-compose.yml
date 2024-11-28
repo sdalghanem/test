@@ -5,8 +5,6 @@ services:
     command: python manage.py runserver 0.0.0.0:8000
     volumes:
       - ./testproject:/app
-    env_file:
-      - .env
     networks:
       - app-network
     expose:
@@ -18,7 +16,8 @@ services:
     image: nginx:alpine
     container_name: nginx
     volumes:
-      - ./nginx/nginx.conf:/etc/nginx/nginx.conf
+      - ./nginx/nginx.conf:/etc/nginx/nginx.conf  # ربط nginx.conf
+      - ./nginx:/etc/nginx/conf.d  # ربط conf.d بحيث يحتوي على default.conf
       - ./testproject:/app
     ports:
       - "80:80"
