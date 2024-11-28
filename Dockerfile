@@ -1,23 +1,17 @@
-# Dockerfile
-FROM python:3.9-slim
+# استخدام صورة Python
+FROM python:3.10-slim
 
-# تثبيت المتطلبات الأساسية
-RUN apt-get update && apt-get install -y \
-    build-essential \
-    libpq-dev
-
-# إعداد العمل
+# تعيين مجلد العمل
 WORKDIR /app
 
+# نسخ ملف المتطلبات
+COPY requirements.txt /app/
+
 # تثبيت المتطلبات
-COPY requirements.txt requirements.txt
 RUN pip install --no-cache-dir -r requirements.txt
 
-# نسخ المشروع
-COPY . .
+# نسخ جميع الملفات إلى المجلد الداخلي
+COPY . /app/
 
-# فتح المنفذ
-EXPOSE 8000
-
-# الأوامر النهائية
-CMD ["gunicorn", "testproject.wsgi:application", "--bind", "0.0.0.0:8000"]
+# تعيين أمر بدء تشغيل التطبيق
+CMD ["gunicorn", "--bind", "0.0.0.0:8000", "testproject.wsgi:application"]

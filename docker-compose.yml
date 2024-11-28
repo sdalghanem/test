@@ -1,23 +1,42 @@
 services:
-  web:
-    build:
-      context: .
-    command: gunicorn testproject.wsgi:application --bind 0.0.0.0:8000
+  django:
+    build: .
+    container_name: django
+    command: python manage.py runserver 0.0.0.0:8000
     volumes:
-      - .:/app
+      - ./testproject:/app
+    env_file:
+      - .env
+    networks:
+      - app-network
     expose:
-      - 8000
+      - "8000"
+    depends_on:
+      - db
 
   nginx:
-    image: nginx:latest
-    container_name: test-nginx
+    image: nginx:alpine
+    container_name: nginx
+    volumes:
+      - ./nginx/nginx.conf:/etc/nginx/nginx.conf
+      - ./testproject:/app
     ports:
       - "80:80"
-      - "443:443"
-    volumes:
-      - ./nginx/nginx.conf:/etc/nginx/conf.d/default.conf
-      - /etc/letsencrypt/live/saadalghanem.com/fullchain.pem:/etc/ssl/certs/fullchain.pem
-      - /etc/letsencrypt/live/saadalghanem.com/privkey.pem:/etc/ssl/private/privkey.pem
+    networks:
+      - app-network
     depends_on:
-      - web
+      - django
 
+  db:
+    image: postgres:latest
+    container_name: db
+    environment:
+      POSTGRES_DB: testdb
+      POSTGRES_USER: testuser
+      POSTGRES_PASSWORD: testpassword
+    networks:
+      - app-network
+
+networks:
+  app-network:
+    driver: bridge
