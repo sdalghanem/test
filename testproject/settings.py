@@ -25,7 +25,18 @@ SECRET_KEY = 'django-insecure-xi3v7yr9udp=eg-%c(rl9&uibvq$_l2l3tccn*gypz(da*ptxq
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['164.92.236.108', 'localhost']
+# السماح بالمضيفين
+ALLOWED_HOSTS = ['164.92.236.108', 'saadalghanem.com', 'www.saadalghanem.com']
+
+# إعدادات HTTPS
+SECURE_SSL_REDIRECT = True
+SESSION_COOKIE_SECURE = True
+CSRF_COOKIE_SECURE = True
+
+# مسارات الشهادات
+SECURE_HSTS_SECONDS = 3600
+SECURE_HSTS_INCLUDE_SUBDOMAINS = True
+SECURE_HSTS_PRELOAD = True
 
 
 
